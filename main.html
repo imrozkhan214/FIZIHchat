@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FizihChat Dashboard</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f5f7fa;
+        color: #343c6a;
+      }
+    
+      .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        background: #f5f7fa;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        background: white;
+        height: 100px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .header-logo {
+        font-size: 40px;
+        font-weight: 900;
+        color: #343c6a;
+      }
+      .search-bar {
+        display: flex;
+        align-items: center;
+        background: #f5f7fa;
+        border-radius: 25px;
+        padding: 5px 15px;
+        width: 250px;
+      }
+      .search-bar input {
+        border: none;
+        outline: none;
+        background: none;
+        padding: 5px;
+        margin-left: 10px;
+        font-size: 14px;
+        color: #8ba3cb;
+      }
+      .search-bar input::placeholder {
+        color: #8ba3cb;
+      }
+      .header-icons {
+        display: flex;
+        gap: 15px;
+      }
+      .icon-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background: #f5f7fa;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .icon-circle img {
+        width: 25px;
+        height: 25px;
+      }
+      .sidebar {
+        width: 250px;
+        background: white;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+        border-right: 1px solid #e6eff5;
+      }
+      .sidebar-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        gap: 15px;
+        cursor: pointer;
+        color: #b1b1b1;
+      }
+      .sidebar-item.active {
+        background: #e6eff5;
+        color: #2d60ff;
+        font-weight: bold;
+      }
+      .sidebar-item-icon {
+        width: 25px;
+        height: 25px;
+      }
+      .main-content {
+        flex: 1;
+        background: #f5f7fa;
+        padding: 20px;
+      }
+
+      .uploads {
+        max-width: 800px;
+        margin: 40px auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+      .section-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #343c6a;
+        margin-bottom: 20px;
+      }
+      .upload-container {
+        text-align: center;
+        border: 2px dashed #d3d3f7;
+        border-radius: 8px;
+        padding: 20px;
+        transition: border-color 0.3s ease;
+      }
+
+      .upload-container:hover {
+        border-color: #483ea8;
+      }
+      
+  .cta-button {
+    display: inline-block;
+    margin: 15px auto;
+    padding: 10px 20px;
+    background-color: #483ea8;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+  }
+
+  .cta-button:hover {
+    background-color: #3c34a6;
+  }
+
+  .file-list {
+    margin-top: 20px;
+  }
+
+  .file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f8ff;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .file-link {
+    text-decoration: none;
+    color: #483ea8;
+    font-weight: bold;
+  }
+
+  .file-link:hover {
+    text-decoration: underline;
+  }
+
+  .progress-container {
+    width: 100%;
+    background: #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: #483ea8;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .error-message {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+      .supported-formats {
+        font-size: 12px;
+        color: #676767;
+        margin-top: 10px;
+      }
+      /* User Info and Settings */
+      .settings-container {
+        width: 100%;
+        max-width: 1110px;
+        background: white;
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.05);
+      }
+      .profile-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .profile-image-wrapper {
+        position: relative;
+        width: 130px;
+        height: 130px;
+        overflow: hidden;
+        border-radius: 50%;
+        background: #c4c4c4;
+      }
+      .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .profile-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.4;
+      }
+      .edit-profile-btn {
+        position: absolute;
+        right: -10px;
+        bottom: -10px;
+        width: 30px;
+        height: 30px;
+        background: #1814f3;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .edit-icon {
+        width: 15px;
+        height: 15px;
+        background: white;
+        border-radius: 50%;
+      }
+      .settings-tabs {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+      .tab {
+        font-size: 16px;
+        font-weight: 500;
+        color: #718ebf;
+        cursor: pointer;
+      }
+      .tab.active {
+        color: #1814f3;
+        font-weight: bold;
+      }
+      .underline {
+        width: 114px;
+        height: 3px;
+        background: #1814f3;
+        border-radius: 10px;
+        margin-top: 5px;
+      }
+      .user-info {
+        margin-top: 20px;
+      }
+      .input-field {
+        width: 100%;
+        padding: 0 20px;
+        height: 50px;
+        border-radius: 15px;
+        border: 1px solid #dfeaf2;
+        background-color: #f8f8ff;
+        font-size: 15px;
+        color: #718ebf;
+      }
+      label {
+        font-size: 16px;
+        color: #232323;
+      }
+
+      /* Chatbot Style */
+      .chatbot-container {
+        width: 100%;
+        max-width: 700px;
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      /* Chat Messages Section */
+      .chatbot-messages {
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 10px;
+        background: #f4f4f4;
+        border-radius: 6px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      /* User's Message Bubble */
+      .user-message {
+        align-self: flex-end;
+        background-color: #483ea8;
+        color: white;
+        padding: 10px;
+        border-radius: 20px;
+        max-width: 80%;
+        word-wrap: break-word;
+        position: relative;
+      }
+      
+      /* Bot's Message Bubble */
+      .bot-message {
+        align-self: flex-start;
+        background-color: #e4e4e4;
+        color: #333;
+        padding: 10px;
+        border-radius: 20px;
+        max-width: 80%;
+        word-wrap: break-word;
+        position: relative;
+      }
+      
+      /* Timestamp for each message */
+      .timestamp {
+        font-size: 0.8em;
+        color: #aaa;
+        position: absolute;
+        bottom: -15px;
+        right: 5px;
+      }
+      
+      /* Input Section */
+      .chatbot-input {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .chatbot-input input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        color: #333;
+      }
+      
+      .chatbot-input button {
+        padding: 10px 20px;
+        background-color: #483ea8;
+        color: white;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+      }
+      
+      .chatbot-input button:hover {
+        background-color: #3c34a6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-logo">FizihChat</div>
+        <div class="header-icons">
+          <div class="icon-circle">
+            <img src="https://via.placeholder.com/25" alt="Notification Icon" />
+          </div>
+          <div class="icon-circle">
+            <img src="https://via.placeholder.com/25" alt="Settings Icon" />
+          </div>
+          <div class="icon-circle">
+            <img
+              src="https://via.placeholder.com/50"
+              alt="Profile Icon"
+              style="border-radius: 50%"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- Content -->
+      <div style="display: flex; flex: 1">
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="sidebar-item active" onclick="showContent('overview')">
+            Overview
+          </div>
+          <div class="sidebar-item" onclick="showContent('uploads')">
+            Uploads
+          </div>
+          <div class="sidebar-item" onclick="showContent('settings'); loadUserSettings();">
+            Settings
+          </div>
+          <div class="sidebar-item" onclick="showContent('chatbot')">
+            Chatbot
+          </div>
+          <!-- Added Chatbot Sidebar Link -->
+        </div>
+        <!-- Main Content -->
+        <div class="main-content">
+          <!-- Overview Section -->
+          <div id="overview" class="overview" style="display: none">
+            <div class="section-title">Overview</div>
+          </div>
+          <!-- Uploads Section -->
+          <div id="uploads" class="uploads">
+            <div class="section-title">Upload Content</div>
+            <div class="upload-container">
+              <label for="file-input" class="cta-button">Upload File</label>
+              <input
+                id="file-input"
+                type="file"
+                accept=".pdf,.txt,.json"
+                multiple
+                hidden
+                onchange="handleFileUpload(event)"
+              />
+              <span>Drag and drop your file here or</span>
+              <span class="browse" onclick="document.getElementById('file-input').click()">Browse</span>
+            </div>
+            <div class="supported-formats">
+              Supported formats: .pdf, .txt, .json
+            </div>
+            <div id="file-list" class="file-list"></div>
+          
+            <div class="cta-button" onclick="manageUploads()">
+              Manage Uploads
+            </div>
+            <div id="file-list" class="file-list"></div>
+          </div>
+          <!-- Chatbot Section -->
+          <div id="chatbot" class="chatbot-container" style="display: none">
+            <div class="section-title">Chatbot</div>
+            <div class="chatbot-messages" id="chatbotMessages"></div>
+            <div class="chatbot-input">
+              <input type="text" id="chatbotInput" placeholder="Ask me anything..." />
+              <button onclick="sendMessage()">Send</button>
+            </div>
+          </div>
+          <!-- Settings Section -->
+<div id="settings" class="settings" style="display: none">
+  <div class="section-title">Settings</div>
+  <div class="settings-container">
+    <div class="profile-section">
+      <div class="profile-image-wrapper">
+        <img class="profile-image" src="https://via.placeholder.com/130" alt="Profile" />
+        <img class="profile-overlay" src="https://via.placeholder.com/130" alt="Profile Overlay" />
+        <div class="edit-profile-btn">
+          <div class="edit-icon"></div>
+        </div>
+      </div>
+    </div>
+    <div class="settings-tabs">
+      <div class="tab active" data-tab="user-info">User Info</div>
+      <div class="tab" data-tab="change-password">Change Password</div>
+      <div class="tab" data-tab="company-info">Company Info</div>
+    </div>
+    <div class="underline"></div>
+
+    <!-- User Info Form -->
+    <div class="tab-content" id="user-info-content">
+      <div class="update-user-info-form">
+        <div>
+          <label for="email">Email</label>
+          <input class="input-field" id="email" type="email" />
+        </div>
+        <button type="submit" onclick="saveSettings()">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- Change Password Form -->
+    <div class="tab-content" id="change-password-content" style="display: none;">
+      <h2>Change Your Password</h2>
+      <form id="change-password-form-submit">
+        <label for="old-password">Old Password:</label>
+        <input type="password" id="old-password" name="old-password" required /><br />
+        <label for="new-password">New Password:</label>
+        <input type="password" id="new-password" name="new-password" required /><br />
+        <button type="submit">Change Password</button>
+      </form>
+    </div>
+
+    <!-- Company Info Form -->
+    <div class="tab-content" id="company-info-content" style="display: none;">
+      <div class="container">
+        <h1>Business Information</h1>
+        <form id="businessForm">
+          <div>
+            <label for="companyName">Company Name:</label>
+            <input type="text" id="companyName" name="companyName" required />
+          </div>
+          <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+          </div>
+          <div>
+            <label for="scope">Scope:</label>
+            <textarea id="scope" name="scope" required></textarea>
+          </div>
+          <div>
+            <label for="limitations">Limitations:</label>
+            <textarea id="limitations" name="limitations" required></textarea>
+          </div>
+          <button type="submit">Save & Proceed</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+            </div>
+          </div>
+          
+          
+
+    <script>
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const tabs = document.querySelectorAll(".tab");
+        const tabContents = document.querySelectorAll(".tab-content");
+      
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", async () => {
+            // Remove the 'active' class from all tabs
+            tabs.forEach((t) => t.classList.remove("active"));
+      
+            // Hide all tab contents
+            tabContents.forEach((content) => (content.style.display = "none"));
+      
+            // Add 'active' class to the clicked tab
+            tab.classList.add("active");
+      
+            // Show the corresponding tab content
+            const tabContentId = tab.getAttribute("data-tab") + "-content";
+            const activeContent = document.getElementById(tabContentId);
+            if (activeContent) {
+              activeContent.style.display = "block";
+      
+              // Fetch and populate company info if 'company-info' tab is clicked
+              if (tab.getAttribute("data-tab") === "company-info") {
+                try {
+                  const response = await fetch("http://127.0.0.1:8080/get-company-info");
+                  if (!response.ok) {
+                    throw new Error(`Error fetching company info: ${response.statusText}`);
+                  }
+                  const companyInfo = await response.json();
+      
+                  // Populate the form fields
+                  document.getElementById("companyName").value = companyInfo.company_name || "";
+                  document.getElementById("description").value = companyInfo.description || "";
+                  document.getElementById("scope").value = companyInfo.scope || "";
+                  document.getElementById("limitations").value = companyInfo.limitations || "";
+                } catch (error) {
+                  console.error("Failed to load company info:", error);
+                  alert("Failed to load company information. Please try again.");
+                }
+              }
+            }
+          });
+        });
+      });
+
+      
+      function showContent(section) {
+        const sections = ["overview", "uploads", "settings", "chatbot"];
+        sections.forEach((sec) => {
+          document.getElementById(sec).style.display =
+            sec === section ? "block" : "none";
+        });
+      }
+
+      function sendMessage() {
+        const message = document.getElementById("chatbotInput").value.trim();
+        const messagesDiv = document.getElementById("chatbotMessages");
+      
+        if (message) {
+          // Display user message
+          const userMessage = document.createElement("div");
+          userMessage.classList.add("user-message");
+          userMessage.textContent = `You: ${message}`;
+      
+          // Add timestamp to user message
+          const userTimestamp = document.createElement("span");
+          userTimestamp.classList.add("timestamp");
+          userTimestamp.textContent = new Date().toLocaleTimeString();
+          userMessage.appendChild(userTimestamp);
+      
+          messagesDiv.appendChild(userMessage);
+      
+          // Show loading text while waiting for the response
+          const loadingMessage = document.createElement("div");
+          loadingMessage.classList.add("bot-message");
+          loadingMessage.textContent = "Bot: Loading...";
+      
+          messagesDiv.appendChild(loadingMessage);
+      
+          // Make a POST request to the FastAPI backend
+          fetch("http://127.0.0.1:8080/ask", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ question: message }), // Send the message as JSON
+          })
+            .then((response) => response.json()) // Parse the JSON response
+            .then((data) => {
+              // Remove the loading text
+              messagesDiv.removeChild(loadingMessage);
+      
+              // Display bot's response
+              const botMessage = document.createElement("div");
+              botMessage.classList.add("bot-message");
+              botMessage.textContent = `Bot: ${data.answer}`;
+      
+              // Add timestamp to bot message
+              const botTimestamp = document.createElement("span");
+              botTimestamp.classList.add("timestamp");
+              botTimestamp.textContent = new Date().toLocaleTimeString();
+              botMessage.appendChild(botTimestamp);
+      
+              messagesDiv.appendChild(botMessage);
+            })
+            .catch((error) => {
+              // Remove the loading text and show error message
+              messagesDiv.removeChild(loadingMessage);
+              const errorMessage = document.createElement("div");
+              errorMessage.classList.add("bot-message");
+              errorMessage.textContent = `Bot: Error: ${error.message}`;
+      
+              // Add timestamp to error message
+              const errorTimestamp = document.createElement("span");
+              errorTimestamp.classList.add("timestamp");
+              errorTimestamp.textContent = new Date().toLocaleTimeString();
+              errorMessage.appendChild(errorTimestamp);
+      
+              messagesDiv.appendChild(errorMessage);
+            });
+      
+          // Clear input field and scroll to latest message
+          document.getElementById("chatbotInput").value = "";
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+      }
+      
+      let uploadedFiles = [];
+
+function handleFileUpload(event) {
+  const files = Array.from(event.target.files);
+  files.forEach((file) => {
+    uploadFileToServer(file);
+  });
+}
+
+async function uploadFileToServer(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const fileList = document.getElementById("file-list");
+
+  // Create file item with a progress bar
+  const fileItem = document.createElement("div");
+  fileItem.className = "file-item";
+
+  const fileName = document.createElement("span");
+  fileName.textContent = file.name;
+
+  const progressContainer = document.createElement("div");
+  progressContainer.className = "progress-container";
+
+  const progressBar = document.createElement("div");
+  progressBar.className = "progress-bar";
+  progressContainer.appendChild(progressBar);
+
+  const errorMessage = document.createElement("div");
+  errorMessage.className = "error-message";
+
+  fileItem.appendChild(fileName);
+  fileItem.appendChild(progressContainer);
+  fileItem.appendChild(errorMessage);
+  fileList.appendChild(fileItem);
+
+  // Upload file and update progress
+  try {
+    const response = await fetch("http://127.0.0.1:8080/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to upload ${file.name}`);
+    }
+
+    let uploadedBytes = 0;
+    const totalBytes = file.size;
+
+    // Simulate progress for demo purposes
+    const interval = setInterval(() => {
+      if (uploadedBytes < totalBytes) {
+        uploadedBytes += totalBytes / 10; // Simulate 10% increment
+        const progress = Math.min((uploadedBytes / totalBytes) * 100, 100);
+        progressBar.style.width = `${progress}%`;
+      } else {
+        clearInterval(interval);
+      }
+    }, 200);
+  } catch (error) {
+    console.error(error);
+    errorMessage.textContent = error.message;
+  }
+}
+
+
+      function manageUploads() {
+        const fileListDiv = document.getElementById("file-list");
+        fileListDiv.innerHTML = "<p>Loading files...</p>"; // Temporary loading message
+    
+        // Fetch the list of files from the server
+        fetch("http://127.0.0.1:8080/uploads")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.files && data.files.length > 0) {
+              fileListDiv.innerHTML = ""; // Clear loading message
+    
+              data.files.forEach((file) => {
+                const fileItem = document.createElement("div");
+                fileItem.className = "file-item";
+    
+                const fileLink = document.createElement("a");
+                fileLink.href = `/static/${file}`;
+                fileLink.textContent = file;
+                fileLink.target = "_blank"; // Open in new tab for safety
+                fileLink.className = "file-link";
+    
+                fileItem.appendChild(fileLink);
+                fileListDiv.appendChild(fileItem);
+              });
+            } else {
+              fileListDiv.innerHTML = "<p>No files uploaded yet.</p>";
+            }
+          })
+          .catch((err) => {
+            console.error("Error fetching uploaded files:", err);
+            fileListDiv.innerHTML = "<p>Error loading files. Please try again.</p>";
+          });
+      }
+
+    async function loadUserSettings() {
+      
+      try {
+        const response = await fetch('http://127.0.0.1:8080/get-user-settings');
+        if (response.ok) {
+            const data = await response.json();
+            // Pre-fill the form with the current user info
+            document.getElementById('email').value = data.email;
+        } else {
+            alert('Error fetching user settings');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+    }
+  
+    // Event listener for the settings button
+    document.getElementById("settings-btn").addEventListener("click", () => {
+      document.getElementById("settings").style.display = "block"; // Show the settings
+      loadUserSettings(); // Fetch and display user info
+    });
+
+
+  // Handle the update user info form submission
+  document.getElementById('update-user-info-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const username = document.getElementById('username').value;
+
+      try {
+          const response = await fetch('/update-user-info', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email, username }),
+          });
+
+          if (response.ok) {
+              alert('User information updated successfully');
+          } else {
+              alert('Error updating user information');
+          }
+      } catch (error) {
+          console.error('Error:', error);
+      }
+  });
+
+  // Handle change password form submission
+  document.getElementById('change-password-form-submit').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const oldPassword = document.getElementById('old-password').value;
+      const newPassword = document.getElementById('new-password').value;
+
+      try {
+          const response = await fetch('/change-password', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ old_password: oldPassword, new_password: newPassword }),
+          });
+
+          if (response.ok) {
+              alert('Password changed successfully');
+          } else {
+              alert('Error changing password');
+          }
+      } catch (error) {
+          console.error('Error:', error);
+      }
+  });
+    </script>
+  </body>
+</html>
